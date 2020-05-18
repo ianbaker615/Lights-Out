@@ -94,7 +94,7 @@ class Board extends Component {
       return hasWon;
     }
 
-    flipCell(y,x);
+    flipCell(y, x);
     checkGameState();
     this.setState({ board: board, hasWon: hasWon });
   }
