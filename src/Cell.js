@@ -20,10 +20,10 @@ class Cell extends Component {
     super(props);
     this.handleClick = this.handleClick.bind(this);
   }
-
+  
   handleClick(evt) {
     // call up to the board to flip cells around this cell
-    this.props.flipCellsAround(`1-1`);
+    this.props.flipCellsAround(this.props.coord);
   }
 
   render() {

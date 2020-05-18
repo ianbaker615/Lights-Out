@@ -71,7 +71,7 @@ class Board extends Component {
     let hasWon = this.state.hasWon;
     let [y, x] = coord.split("-").map(Number);
 
-    board = (function flipCell(y, x) {
+    function flipCell(y, x) {
       // if this coord is actually on board, flip it
       if (x >= 0 && x < ncols && y >= 0 && y < nrows) {
         board[y][x] = !board[y][x];
@@ -84,17 +84,18 @@ class Board extends Component {
         //left
         if (board[y][x - 1]) board[y][x - 1] = !board[y][x - 1];
       }
-      return board
-    })()
+    }
 
     // win when every cell is turned off
-    hasWon = (function checkGameState() {
+    function checkGameState() {
       hasWon = board.every(function(arr) {
         return arr.every((el) => el === false);
       });
       return hasWon;
-    })();
+    }
 
+    flipCell(y,x);
+    checkGameState();
     this.setState({ board: board, hasWon: hasWon });
   }
 
@@ -113,8 +114,10 @@ class Board extends Component {
                   return row.map((_, idx2) => {
                     return (
                       <Cell
-                        key={[idx1, idx2]}
+                        coord={`${idx1}-${idx2}`}
+                        key={`${idx1}-${idx2}`}
                         flipCellsAround={this.flipCellsAround}
+                        isLit={this.state.board[idx1][idx2]}
                       />
                     );
                   });
