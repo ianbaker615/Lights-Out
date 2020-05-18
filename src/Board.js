@@ -33,35 +33,37 @@ class Board extends Component {
   static defaultProps = {
     nrows: 5,
     ncols: 5,
-    chanceLightStartsOn: 0.5,
+    chanceLightStartsOn: 0.3,
   };
 
   constructor(props) {
     super(props);
+    const board = this.createBoard();
     this.state = {
       hasWon: false,
-      board: true,
+      board: board,
     };
+  }
+
+  determineStartingLights() {
+    const odds = [
+      [true, this.props.chanceLightStartsOn * 100],
+      [false, (1 - this.props.chanceLightStartsOn) * 100],
+    ];
+    return randomWeightedPick(odds);
   }
 
   /** create a board nrows high/ncols wide, each cell randomly lit or unlit */
   createBoard() {
     let board = Array.from({ length: this.props.nrows }, () =>
-      Array.from({ length: this.props.ncols }, x => this.determineStartingLights())
+      Array.from({ length: this.props.ncols }, (x) =>
+        this.determineStartingLights()
+      )
     );
     return board;
   }
 
-  determineStartingLights() {
-    const odds = [
-      [true, this.props.chanceLightStartsOn],
-      [false, 1 - this.props.chanceLightStartsOn],
-    ];
-    return randomWeightedPick(odds);
-  }
-
   /** handle changing a cell: update board & determine if winner */
-
   flipCellsAround(coord) {
     let { ncols, nrows } = this.props;
     let board = this.state.board;
@@ -69,9 +71,16 @@ class Board extends Component {
 
     function flipCell(y, x) {
       // if this coord is actually on board, flip it
-
       if (x >= 0 && x < ncols && y >= 0 && y < nrows) {
         board[y][x] = !board[y][x];
+        //above
+        if (board[y-1][x]) board[y-1][x] = !board[y-1][x];
+        //right
+        if (board[y][x+1]) board[y][x+1] = !board[y][x+1];
+        //below
+        if (board[y+1][x]) board[y+1][x] = !board[y+1][x];
+        //left
+        if (board[y][x-1]) board[y][x-1] = !board[y][x-1];
       }
     }
 
@@ -84,9 +93,7 @@ class Board extends Component {
   }
 
   /** Render game board or winning message. */
-
   render() {
-    this.createBoard();
     return <div className="Board">Board Component</div>;
 
     // if the game is won, just show a winning msg & render nothing else
