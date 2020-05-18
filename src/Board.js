@@ -107,22 +107,26 @@ class Board extends Component {
         <table>
           <tbody>
             {this.state.hasWon ? (
-              <p>You Won!</p>
+              <td>You Won!</td>
             ) : (
-              <tr>
+              <td>
                 {this.state.board.map((row, idx1) => {
-                  return row.map((_, idx2) => {
-                    return (
-                      <Cell
-                        coord={`${idx1}-${idx2}`}
-                        key={`${idx1}-${idx2}`}
-                        flipCellsAround={this.flipCellsAround}
-                        isLit={this.state.board[idx1][idx2]}
-                      />
-                    );
-                  });
+                  return (
+                    <tr>
+                      {row.map((_, idx2) => {
+                        return (
+                          <Cell
+                            coord={`${idx1}-${idx2}`}
+                            key={`${idx1}-${idx2}`}
+                            flipCellsAround={this.flipCellsAround}
+                            isLit={this.state.board[idx1][idx2]}
+                          />
+                        );
+                      })}
+                    </tr>
+                  );
                 })}
-              </tr>
+              </td>
             )}
           </tbody>
         </table>
