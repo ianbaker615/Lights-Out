@@ -43,6 +43,7 @@ class Board extends Component {
       hasWon: false,
       board: board,
     };
+    this.flipCellsAround = this.flipCellsAround.bind(this);
   }
 
   determineStartingLights() {
@@ -70,7 +71,7 @@ class Board extends Component {
     let hasWon = this.state.hasWon;
     let [y, x] = coord.split("-").map(Number);
 
-    function flipCell(y, x) {
+    board = (function flipCell(y, x) {
       // if this coord is actually on board, flip it
       if (x >= 0 && x < ncols && y >= 0 && y < nrows) {
         board[y][x] = !board[y][x];
@@ -83,29 +84,47 @@ class Board extends Component {
         //left
         if (board[y][x - 1]) board[y][x - 1] = !board[y][x - 1];
       }
-    }
+      return board
+    })()
 
     // win when every cell is turned off
-    function checkGameState() {
+    hasWon = (function checkGameState() {
       hasWon = board.every(function(arr) {
         return arr.every((el) => el === false);
       });
-    }
-    
-    this.setState({ board, hasWon });
+      return hasWon;
+    })();
+
+    this.setState({ board: board, hasWon: hasWon });
   }
 
   /** Render game board or winning message. */
   render() {
-    return <div className="Board">Board Component</div>;
-
-    // if the game is won, just show a winning msg & render nothing else
-
-    // TODO
-
-    // make table board
-
-    // TODO
+    return (
+      <div className="Board">
+        {/* if the game is won, just show a winning msg & render nothing else */}
+        <table>
+          <tbody>
+            {this.state.hasWon ? (
+              <p>You Won!</p>
+            ) : (
+              <tr>
+                {this.state.board.map((row, idx1) => {
+                  return row.map((_, idx2) => {
+                    return (
+                      <Cell
+                        key={[idx1, idx2]}
+                        flipCellsAround={this.flipCellsAround}
+                      />
+                    );
+                  });
+                })}
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    );
   }
 }
 
