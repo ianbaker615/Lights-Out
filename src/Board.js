@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import Cell from "./Cell";
 import "./Board.css";
-import randomWeightedPick from "pick-random-weighted";
 
 /** Game board of Lights out.
  *
@@ -67,62 +66,70 @@ class Board extends Component {
       // if this coord is actually on board, flip it
       if (x >= 0 && x < ncols && y >= 0 && y < nrows) {
         board[y][x] = !board[y][x];
-        //above
-        if (y - 1 >= 0) board[y - 1][x] = !board[y - 1][x];
-        //right
-        if (x + 1 <= ncols - 1) board[y][x + 1] = !board[y][x + 1];
-        //below
-        if (y + 1 <= nrows - 1) board[y + 1][x] = !board[y + 1][x];
-        //left
-        if (x - 1 >= 0) board[y][x - 1] = !board[y][x - 1];
       }
     }
+    //flip cells
+    flipCell(y , x); //clicked cell
+    flipCell(y + 1 , x); //flip above
+    flipCell(y - 1 , x); //flip below
+    flipCell(y , x - 1); //flip left
+    flipCell(y , x + 1); //flip right
+    
+    //Check if game has been won
+    hasWon = board.every(row => row.every(cell => !cell));
 
-    // win when every cell is turned off
-    function checkGameState() {
-      hasWon = board.every(function(arr) {
-        return arr.every((el) => el === false);
-      });
-      return hasWon;
-    }
-
-    flipCell(y, x);
-    checkGameState();
     this.setState({ board: board, hasWon: hasWon });
   }
 
   /** Render game board or winning message. */
   render() {
+    if (this.state.hasWon){
+      return <h1>You Won!</h1>
+    }
+    let tblBoard = [];
+    for (let y = 0; y < this.props.nrows; y++) {
+      let row = [];
+      for (let x = 0; x < this.props.ncols; x++) {
+        let coord = `${y}-${x}`;
+        row.push(
+          <Cell
+            key={coord}
+            coord={coord}
+            isLit={this.state.board[y][x]}
+            flipCellsAround={this.flipCellsAround}
+          />
+        );
+      }
+      tblBoard.push(<tr key={y}>{row}</tr>);
+    }
+
     return (
-      <div className="Board">
-        {/* if the game is won, just show a winning msg & render nothing else */}
-        <table>
-          <tbody>
-            {this.state.hasWon ? (
-              <td>You Won!</td>
-            ) : (
-                <td>
-                  {this.state.board.map((row, idx1) => {
-                    return (
-                      <tr key={idx1}>
-                        {row.map((_, idx2) => {
-                          return (
-                            <Cell
-                              coord={`${idx1}-${idx2}`}
-                              key={`${idx1}-${idx2}`}
-                              flipCellsAround={this.flipCellsAround}
-                              isLit={this.state.board[idx1][idx2]}
-                            />
-                          );
-                        })}
-                      </tr>
-                    );
-                  })}
-                </td>
-            )}
-          </tbody>
-        </table>
-      </div>
+      <table className="Board">
+        <tbody>
+          {this.state.hasWon ? (
+            <td>You Won!</td>
+          ) : (
+            <td>
+              {this.state.board.map((row, idx1) => {
+                return (
+                  <tr key={idx1}>
+                    {row.map((_, idx2) => {
+                      return (
+                        <Cell
+                          coord={`${idx1}-${idx2}`}
+                          key={`${idx1}-${idx2}`}
+                          flipCellsAround={this.flipCellsAround}
+                          isLit={this.state.board[idx1][idx2]}
+                        />
+                      );
+                    })}
+                  </tr>
+                );
+              })}
+            </td>
+          )}
+        </tbody>
+      </table>
     );
   }
 }
