@@ -69,22 +69,31 @@ class Board extends Component {
       }
     }
     //flip cells
-    flipCell(y , x); //clicked cell
-    flipCell(y + 1 , x); //flip above
-    flipCell(y - 1 , x); //flip below
-    flipCell(y , x - 1); //flip left
-    flipCell(y , x + 1); //flip right
-    
+    flipCell(y, x); //clicked cell
+    flipCell(y + 1, x); //flip above
+    flipCell(y - 1, x); //flip below
+    flipCell(y, x - 1); //flip left
+    flipCell(y, x + 1); //flip right
+
     //Check if game has been won
-    hasWon = board.every(row => row.every(cell => !cell));
+    hasWon = board.every((row) => row.every((cell) => !cell));
 
     this.setState({ board: board, hasWon: hasWon });
   }
 
   /** Render game board or winning message. */
   render() {
-    if (this.state.hasWon){
-      return <h1>You Won!</h1>
+    if (this.state.hasWon) {
+      return (
+        <div>
+          <div className="Board-title">
+            <div className="winner">
+              <span className="neon-orange">YOU</span>
+              <span className="neon-blue">WIN</span>
+            </div>
+          </div>
+        </div>
+      );
     }
     let tblBoard = [];
     for (let y = 0; y < this.props.nrows; y++) {
@@ -105,9 +114,13 @@ class Board extends Component {
 
     return (
       <table className="Board">
-        <tbody>
-          {tblBoard}
-        </tbody>
+        <div>
+          <div className="Board-title">
+            <div className="neon-orange">Lights</div>
+            <div className="neon-blue">Out</div>
+          </div>
+        </div>
+        <tbody>{tblBoard}</tbody>
       </table>
     );
   }
