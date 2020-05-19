@@ -46,14 +46,6 @@ class Board extends Component {
     this.flipCellsAround = this.flipCellsAround.bind(this);
   }
 
-  determineStartingLights() {
-    const odds = [
-      [true, this.props.chanceLightStartsOn * 100],
-      [false, (1 - this.props.chanceLightStartsOn) * 100],
-    ];
-    return randomWeightedPick(odds);
-  }
-
   /** create a board nrows high/ncols wide, each cell randomly lit or unlit */
   createBoard() {
     let board = Array.from({ length: this.props.nrows }, () =>
