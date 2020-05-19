@@ -113,15 +113,16 @@ class Board extends Component {
     }
 
     return (
-      <table className="Board">
-        <div>
-          <div className="Board-title">
-            <div className="neon-orange">Lights</div>
-            <div className="neon-blue">Out</div>
-          </div>
+      <div>
+        <div className="Board-title">
+          <div className="neon-orange">Lights</div>
+          <div className="neon-blue">Out</div>
         </div>
-        <tbody>{tblBoard}</tbody>
-      </table>
+
+        <table className="Board">
+          <tbody>{tblBoard}</tbody>
+        </table>
+      </div>
     );
   }
 }
