@@ -76,13 +76,13 @@ class Board extends Component {
       if (x >= 0 && x < ncols && y >= 0 && y < nrows) {
         board[y][x] = !board[y][x];
         //above
-        if (board[y - 1][x]) board[y - 1][x] = !board[y - 1][x];
+        if (y - 1 >= 0) board[y - 1][x] = !board[y - 1][x];
         //right
-        if (board[y][x + 1]) board[y][x + 1] = !board[y][x + 1];
+        if (x + 1 <= ncols - 1) board[y][x + 1] = !board[y][x + 1];
         //below
-        if (board[y + 1][x]) board[y + 1][x] = !board[y + 1][x];
+        if (y + 1 <= nrows - 1) board[y + 1][x] = !board[y + 1][x];
         //left
-        if (board[y][x - 1]) board[y][x - 1] = !board[y][x - 1];
+        if (x - 1 >= 0) board[y][x - 1] = !board[y][x - 1];
       }
     }
 
@@ -109,24 +109,24 @@ class Board extends Component {
             {this.state.hasWon ? (
               <td>You Won!</td>
             ) : (
-              <td>
-                {this.state.board.map((row, idx1) => {
-                  return (
-                    <tr>
-                      {row.map((_, idx2) => {
-                        return (
-                          <Cell
-                            coord={`${idx1}-${idx2}`}
-                            key={`${idx1}-${idx2}`}
-                            flipCellsAround={this.flipCellsAround}
-                            isLit={this.state.board[idx1][idx2]}
-                          />
-                        );
-                      })}
-                    </tr>
-                  );
-                })}
-              </td>
+                <td>
+                  {this.state.board.map((row, idx1) => {
+                    return (
+                      <tr key={idx1}>
+                        {row.map((_, idx2) => {
+                          return (
+                            <Cell
+                              coord={`${idx1}-${idx2}`}
+                              key={`${idx1}-${idx2}`}
+                              flipCellsAround={this.flipCellsAround}
+                              isLit={this.state.board[idx1][idx2]}
+                            />
+                          );
+                        })}
+                      </tr>
+                    );
+                  })}
+                </td>
             )}
           </tbody>
         </table>
