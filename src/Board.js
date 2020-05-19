@@ -58,7 +58,7 @@ class Board extends Component {
   createBoard() {
     let board = Array.from({ length: this.props.nrows }, () =>
       Array.from({ length: this.props.ncols }, (x) =>
-        this.determineStartingLights()
+        Math.random() < this.props.chanceLightStartsOn ? true : false
       )
     );
     return board;
