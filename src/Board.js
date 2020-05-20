@@ -14,18 +14,9 @@ import "./Board.css";
  *
  * - hasWon: boolean, true when board is all off
  * - board: array-of-arrays of true/false
- *
- *    For this board:
- *       .  .  .
- *       O  O  .     (where . is off, and O is on)
- *       .  .  .
- *
- *    This would be: [[f, f, f], [t, t, f], [f, f, f]]
- *
+ * 
  *  This should render an HTML table of individual <Cell /> components.
- *
- *  This doesn't handle any clicks --- clicks are on individual cells
- *
+ * 
  **/
 
 class Board extends Component {
